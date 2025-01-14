@@ -1,0 +1,3 @@
+docker exec -it influxdb influx setup --username grafana --password password --org test --bucket mon123 --retention 168h   --force
+
+curl -X GET http://localhost:8086/health
