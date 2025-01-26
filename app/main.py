@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from pymongo import MongoClient
+from elasticsearch import Elasticsearch
 import requests
+
+
 
 app = FastAPI()
 client = MongoClient("mongodb://mongodb:27017")
@@ -10,14 +13,23 @@ db = client.test
 def health_check():
     return {"status": "ok"}
 
-#@app.get("/data")
-#def fetch_data():
-#    response = requests.get("http://elasticsearch:9200")
-#    return {"elasticsearch": response.json(), "mongo_collections": db.list_collection_names()}
+
+es = Elasticsearch(
+    ["https://elasticsearch:9200"],
+    verify_certs=False,  # Отключает проверку сертификатов
+    basic_auth=('elastic', 'password')  # Укажите правильные учетные данные, если есть
+)
+
 @app.get("/data")
-def fetch_data():
+def get_data():
     try:
-        response = requests.get("http://elasticsearch:9200", timeout=5)
-        return {"elasticsearch": response.json(), "mongo_collections": db.list_collection_names()}
-    except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
+        mongo_status = db.command("ping")
+    except Exception as e:
+        mongo_status = {"error": str(e)}
+
+    try:
+        es_status = es.ping()
+    except Exception as e:
+        es_status = False
+
+    return {"mongo": mongo_status, "elasticsearch": es_status}
