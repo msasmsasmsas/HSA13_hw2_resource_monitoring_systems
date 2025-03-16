@@ -3,3 +3,4 @@ uvicorn
 pymongo
 requests
 elasticsearch
+prometheus-fastapi-instrumentator

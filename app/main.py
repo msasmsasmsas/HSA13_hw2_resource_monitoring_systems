@@ -13,7 +13,16 @@ es_client = Elasticsearch("http://elasticsearch:9200")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello from FastAPI"}
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+@app.get("/load_test")
+async def load_test():
+    return {"result": sum(i * i for i in range(10000))}
+
 
 @app.post("/load_mongo")
 async def load_mongo():
