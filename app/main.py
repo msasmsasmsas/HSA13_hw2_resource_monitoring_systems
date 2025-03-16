@@ -2,8 +2,12 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 from elasticsearch import Elasticsearch
 import random
+from prometheus_fastapi_instrumentator import Instrumentator
+
+
 
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 mongo_client = MongoClient("mongo:27017")
 es_client = Elasticsearch("http://elasticsearch:9200")
 

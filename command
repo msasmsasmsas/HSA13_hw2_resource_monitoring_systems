@@ -1,4 +1,4 @@
-# docker-compose up --build
+docker-compose up --build
 # docker-compose down && docker-compose up --build -d
 # siege -c 100 -r 100 http://localhost/
 
