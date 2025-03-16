@@ -1,35 +1,34 @@
 from fastapi import FastAPI
 from pymongo import MongoClient
 from elasticsearch import Elasticsearch
-import requests
-
-
+import random
 
 app = FastAPI()
-client = MongoClient("mongodb://mongodb:27017")
-db = client.test
+mongo_client = MongoClient("mongo:27017")
+es_client = Elasticsearch("http://elasticsearch:9200")
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 
+@app.post("/load_mongo")
+async def load_mongo():
+    db = mongo_client.test_db
+    collection = db.test_collection
+    for _ in range(100):
+        collection.insert_one({"value": random.randint(1, 1000)})
+    result = collection.find().limit(100)
+    return {"inserted": 100, "fetched": len(list(result))}
 
-es = Elasticsearch(
-    ["https://elasticsearch:9200"],
-    verify_certs=False,  # Отключает проверку сертификатов
-    basic_auth=('elastic', 'password')  # Укажите правильные учетные данные, если есть
-)
+@app.get("/load_elastic")
+async def load_elastic():
+    for i in range(100):
+        es_client.index(index="test_index", body={"value": random.randint(1, 1000)})
+    result = es_client.search(index="test_index", query={"match_all": {}})
+    return {"indexed": 100, "found": result["hits"]["total"]["value"]}
 
-@app.get("/data")
-def get_data():
-    try:
-        mongo_status = db.command("ping")
-    except Exception as e:
-        mongo_status = {"error": str(e)}
-
-    try:
-        es_status = es.ping()
-    except Exception as e:
-        es_status = False
-
-    return {"mongo": mongo_status, "elasticsearch": es_status}
+@app.get("/combined_load")
+async def combined_load():
+    mongo_result = await load_mongo()
+    elastic_result = await load_elastic()
+    return {"mongo": mongo_result, "elastic": elastic_result}
