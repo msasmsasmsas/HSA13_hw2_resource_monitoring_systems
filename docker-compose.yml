@@ -20,8 +20,8 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
     networks:
       - monitoring
 
@@ -59,6 +59,8 @@ services:
       - ./monitoring/telegraf.conf:/etc/telegraf/telegraf.conf
       - /var/run/docker.sock:/var/run/docker.sock
     user: "root"
+    group_add:
+      - 1001
     depends_on:
       elasticsearch:
         condition: service_healthy
