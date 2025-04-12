@@ -2,9 +2,6 @@
 
 ![изображение](https://github.com/user-attachments/assets/f231b6b6-88da-493d-b7b8-3f3a464498f4)
 
-![изображение](https://github.com/user-attachments/assets/ee2313e9-49f2-481c-a864-ae7e220cd21b)
-
-![изображение](https://github.com/user-attachments/assets/85176ecd-4a0b-40be-b840-26d79d5b6c82)
 
 
 # 🛠️ Resource Monitoring System using TIG Stack (Telegraf + InfluxDB + Grafana)
@@ -55,17 +52,17 @@ MongoDB   Elasticsearch
 
 Monitoring:
 Telegraf → InfluxDB → Grafana
-
-🚀 Getting Started
+```
+## 🚀 Getting Started
 1. Clone the Repository
-
+```
 git clone https://github.com/yourusername/HSA13_hw2_Resource_monitoring_systems.git
 cd HSA13_hw2_Resource_monitoring_systems
-
+```
 2. Start the Project
-
+```
 docker-compose up --build
-
+```
 Services available:
 
     FastAPI: http://localhost:8080
@@ -78,13 +75,14 @@ Services available:
 
     Elasticsearch: http://localhost:9200
 
-📈 Load Testing
+## 📈 Load Testing
 
 To simulate traffic and monitor system behavior:
 
 # Windows PowerShell
+```
 .\load_test.ps1
-
+```
 This script sends parallel requests to:
 
     /load_mongo — writes and reads from MongoDB
@@ -94,7 +92,7 @@ This script sends parallel requests to:
     /combined_load — uses both MongoDB and Elasticsearch
 
 You can customize the number of threads and requests inside load_test.ps1.
-📉 Monitoring Setup
+## 📉 Monitoring Setup
 
     Grafana Access
 
@@ -126,7 +124,7 @@ You can customize the number of threads and requests inside load_test.ps1.
 
             Docker container CPU, memory, network usage
 
-📸 Screenshots & Reports
+## 📸 Screenshots & Reports
 Load Testing Proof
 
     Screenshots of Grafana during active load (CPU, query rates, memory)
@@ -147,7 +145,7 @@ You can export Grafana panels as:
 
     PDF via Grafana report tools
 
-🧪 Endpoints
+## 🧪 Endpoints
 Method	Endpoint	Description
 GET	/	Hello message
 GET	/health	Healthcheck endpoint
